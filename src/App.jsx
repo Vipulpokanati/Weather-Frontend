@@ -5,10 +5,9 @@ import './App.css';
 function App() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [weather, setWeather] = React.useState(null);
-
   const onSubmit = async (data) => {
     try {
-      const response = await axios.get(`https://weather-backend-production-fc95.up.railway.app/api/weather?city=${data.city}`);
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${data.city}&appid=5800f42a1230b82e64fe80e6cd21211d&units=metric`);
       setWeather(response.data);
     } catch (error) {
       alert("Error fetching weather data.");
@@ -24,8 +23,8 @@ return (
         placeholder="Enter city"
         {...register("city", { required: "City name is required" })}
       />
-      <button type="submit">Get Weather</button>
       {errors.city && <p className="error-message">{errors.city.message}</p>}
+      <button type="submit">Get Weather</button>
     </form>
 
     {weather && (
@@ -33,7 +32,10 @@ return (
         <h2>{weather.name}</h2>
         <p>{weather.weather[0].main} - {weather.weather[0].description}</p>
         <p>Temp: {weather.main.temp} °C</p>
+        <p>Feels like: {weather.main.feels_like} °C</p>
         <p>Humidity: {weather.main.humidity}%</p>
+        <p>Min Temp: {weather.main.temp_min} °C</p>
+        <p>Max Temp: {weather.main.temp_max} °C</p>
       </div>
     )}
   </div>
